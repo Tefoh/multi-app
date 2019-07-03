@@ -16,3 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::apiResource('user', 'API\UserController');
+Route::get('profile', 'API\ProfileController@index');
+Route::patch('profile', 'API\ProfileController@update');
+
+Route::get('search/{model}', 'API\SearchController@index');

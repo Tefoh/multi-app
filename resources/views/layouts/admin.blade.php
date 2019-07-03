@@ -4,12 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>پنل مدیریت | داشبورد اول</title>
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/css/app.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <!-- iCheck -->
@@ -33,7 +39,7 @@
 
 </head>
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
+<div class="wrapper" id="app">
 
     <!-- Navbar -->
     @include('_partials.top-nav')
@@ -59,10 +65,16 @@
 </div>
 <!-- ./wrapper -->
 
+@auth
+    <script>
+        window.user = @json(auth()->user())
+    </script>
+@endauth
+
 <!-- jQuery -->
-<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="/js/app.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="/https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -70,8 +82,8 @@
 <!-- Bootstrap 4 -->
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Morris.js charts -->
-<script src="/https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="/plugins/morris/morris.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+{{--<script src="/plugins/morris/morris.min.js"></script>--}}
 <!-- Sparkline -->
 <script src="/plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->
@@ -80,7 +92,7 @@
 <!-- jQuery Knob Chart -->
 <script src="/plugins/knob/jquery.knob.js"></script>
 <!-- daterangepicker -->
-<script src="/https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
 <script src="/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- datepicker -->
 <script src="/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -93,7 +105,7 @@
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="/dist/js/pages/dashboard.js"></script>
+{{--<script src="/dist/js/pages/dashboard.js"></script>--}}
 <!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
 </body>

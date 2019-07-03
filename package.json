@@ -22,5 +22,13 @@
     "sass-loader": "^7.1.0",
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.6.10"
+  },
+  "dependencies": {
+    "moment": "^2.24.0",
+    "vform": "^1.0.0",
+    "sweetalert2": "^8.13.0",
+    "vue-progressbar": "^0.7.5",
+    "vue-router": "^3.0.6",
+    "laravel-vue-pagination": "^2.3.0"
   }
 }

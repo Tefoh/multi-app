@@ -25,52 +25,60 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link to="/dashboard" class="nav-link">
                             <i class="nav-icon fa fa-dashboard"></i>
                             <p>
                                 داشبورد
                             </p>
-                        </a>
+                        </router-link>
                     </li>
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fa fa-table"></i>
-                            <p>
-                                جداول
-                                <i class="fa fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="pages/tables/simple.html" class="nav-link">
-                                    <i class="fa fa-circle-o nav-icon"></i>
-                                    <p>جداول ساده</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/tables/data.html" class="nav-link">
-                                    <i class="fa fa-circle-o nav-icon"></i>
-                                    <p>جداول داده</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @can('isAdmin')
+                        <li class="nav-item has-treeview">
+                            <a href="{{ route('home') }}" class="nav-link">
+                                <i class="nav-icon fa fa-table"></i>
+                                <p>
+                                    مدیریت
+                                    <i class="fa fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <router-link to="/users" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>کاربران</p>
+                                    </router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>جداول داده</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
 
                     <li class="nav-item">
-                        <a href="pages/widgets.html" class="nav-link">
+                        <router-link to="/profile" class="nav-link">
                             <i class="nav-icon fa fa-user"></i>
                             <p>
                                 پروفایل
                             </p>
-                        </a>
+                        </router-link>
                     </li>
 
                     <li class="nav-item">
-                        <a href="pages/widgets.html" class="nav-link">
+                        <a href="{{ route('logout') }}"
+                           class="nav-link"
+                           onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                             <i class="nav-icon fa fa-power-off"></i>
                             <p>
                                 خروج
                             </p>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </a>
                     </li>
                 </ul>
