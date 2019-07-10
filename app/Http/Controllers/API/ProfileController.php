@@ -2,47 +2,37 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Facades\Profile;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     public function index()
     {
         return auth('api')->user();
     }
 
-    public function update(Request $request)
+    public function update(ProfileRequest $request)
     {
-        $user = auth('api')->user();
+        try {
+            $user = auth('api')->user();
 
-        $request->validate([
-            'name'      => 'required|string|max:191',
-            'email'     => 'required|string|max:191|email|unique:users,email,' . $user->id,
-            'type'      => 'required|string|max:191',
-            'password'  => 'nullable|string|min:6',
-        ]);
+            $data = $request->all();
+            $data['photo'] = Profile::update();
 
-        $data = $request->all();
-
-        if($request->photo != $user->photo) {
-
-            $fileName = now()->timestamp . '.' . explode('/', substr($request->photo, 0, strpos($request->photo, ';')))[1];
-            \Image::make($request->photo)->save(public_path('images/profiles/') . $fileName);
-
-            $data['photo'] = $fileName;
-
-            if (file_exists($userPhoto = public_path('images/profiles/') . $user->photo)) {
-                unlink($userPhoto);
+            if (! empty($request->password)) {
+                $data['password'] = Hash::make($request->password);
             }
-        }
+            $user->update($data);
 
-        if (!empty($request->password)) {
-            $data['password'] = Hash::make($request->password);
+            return response()->json(['updated'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['an error happened!!!'], 500);
         }
-
-        $user->update($data);
-        return ['ok'];
     }
 }

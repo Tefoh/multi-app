@@ -8,7 +8,50 @@
 @import '~bootstrap/scss/bootstrap';
 
 
+@import '~@voerro/vue-tagsinput/dist/style.css';
+
+
 .router-link-exact-active {
   background-color: #2074b5;
   color: #f6edff !important;
+}
+
+
+.projects {
+  margin: 0 auto;
+
+  .tableFilters {
+    margin-bottom: 10px;
+    input {
+      width: 175px;
+    }
+    .control {
+      float: right;
+    }
+  }
+
+  .table {
+    width: 100%;
+
+    .sorting {
+      background-image: url('/images/sort_both.png');
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+    .sorting_asc {
+      background-image: url('/images/sort_asc.png');
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+    .sorting_desc {
+      background-image: url('/images/sort_desc.png');
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+  }
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
 }

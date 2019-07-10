@@ -8,16 +8,22 @@ export default class Gate {
         return this.user.type === 'admin';
     }
 
-    isAuthor() {
-        return this.user.type === 'author';
+    isFreelancer() {
+        return this.user.type === 'freelancer';
     }
 
     isUser() {
         return this.user.type === 'user';
     }
 
-    isAdminOrAuthor() {
-        if (this.user.type === 'admin' || this.user.type === 'author')  {
+    isAdminOrFreelancer() {
+        if (this.user.type === 'admin' || this.user.type === 'freelancer')  {
+            return true;
+        }
+    }
+
+    isAdminOrUser() {
+        if (this.user.type === 'admin' || this.user.type === 'user')  {
             return true;
         }
     }

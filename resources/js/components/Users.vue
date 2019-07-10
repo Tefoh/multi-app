@@ -2,11 +2,11 @@
     <div class="container">
         <div class="row mt-5">
 
-            <div v-if="! $gate.isAdminOrAuthor()">
+            <div v-if="! $gate.isAdmin()">
                 <not-found></not-found>
             </div>
 
-            <div class="col-12" v-if="$gate.isAdminOrAuthor()">
+            <div class="col-12" v-if="$gate.isAdmin()">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">لیست کاربران</h3>
@@ -86,8 +86,8 @@
                                 <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                                     <option value="">نقش را انتخاب کنید</option>
                                     <option value="admin">مدیر</option>
-                                    <option value="user">کاربر عادی</option>
-                                    <option value="author">نویسنده</option>
+                                    <option value="user">کارفرما</option>
+                                    <option value="freelancer">فریلنسر</option>
                                 </select>
                                 <has-error :form="form" field="type"></has-error>
                             </div>
@@ -102,6 +102,7 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                                 <button :disabled="form.busy" type="submit" class="btn info">اپدیت</button>
                             </div>
+                            <input type="hidden" :v-model="form.id">
                         </form>
                     </div>
                 </div>
@@ -137,7 +138,7 @@
 
         methods: {
             loadUsers(page = 1) {
-                if (this.$gate.isAdminOrAuthor()) {
+                if (this.$gate.isAdmin()) {
                     axios.get('api/user?page=' + page).then(({ data }) => (this.users = data));
                 }
             },
@@ -212,7 +213,7 @@
                 this.loadUsers();
             });
             this.$root.$on('searching', () => {
-                axios.get('api/search/user?search=' + this.$parent.search)
+                axios.get('api/search/user?name=' + this.$parent.search)
                     .then(({ data }) => (this.users = data));
             });
         }

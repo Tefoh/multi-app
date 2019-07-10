@@ -17,9 +17,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['namespace' => 'API'], function () {
 
-Route::apiResource('user', 'API\UserController');
-Route::get('profile', 'API\ProfileController@index');
-Route::patch('profile', 'API\ProfileController@update');
+    Route::apiResources([
+        'user'      => 'UserController',
+        'project'   => 'ProjectController',
+    ]);
 
-Route::get('search/{model}', 'API\SearchController@index');
+    Route::get('categories', 'CategoryController@index');
+
+    Route::get('profile', 'ProfileController@index');
+    Route::patch('profile', 'ProfileController@update');
+
+    Route::get('search/{model}', 'SearchController@index');
+
+    Route::post('proposal/{project}/', 'ProposalController@store');
+
+    Route::post('accept-proposal', 'AcceptProposalController@store');
+    Route::delete('accept-proposal/{project}', 'AcceptProposalController@destroy');
+});

@@ -31,8 +31,8 @@
                                 <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                                     <option value="">نقش را انتخاب کنید</option>
                                     <option value="admin">مدیر</option>
-                                    <option value="user">کاربر عادی</option>
-                                    <option value="author">نویسنده</option>
+                                    <option value="user">کارفرما</option>
+                                    <option value="freelancer">فریلنسر</option>
                                 </select>
                                 <has-error :form="form" field="type"></has-error>
                             </div>

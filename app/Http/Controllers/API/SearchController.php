@@ -2,21 +2,36 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class SearchController extends Controller
 {
+
+    protected $searchable = [
+        'name', 'title'
+    ];
+    /**
+     * @param $model
+     * @return ResponseFactory|Response
+     */
     public function index($model)
     {
-        $className = '\App\\' . ucfirst($model);
+        try {
+            $className = '\App\\' . ucfirst($model);
 
-        if ($query = \request()->get('search')) {
-            return $className::where('name', 'LIKE', "%$query%")
-                                ->orWhere('email', 'LIKE', "%$query%")
-                                ->paginate(15);
+            foreach ($this->searchable as $searchable) {
+                if ($query = \request()->get($searchable)) {
+                    $model = $className::where($searchable, 'LIKE', "%$query%");
+                }
+            }
+
+            return $model->latest()->paginate(15);
+        } catch (Exception $e) {
+            return response(['an error happened!!!'], 500);
         }
-
-        return $className::latest()->paginate(15);
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Http\Response;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Routing\ResponseFactory;
 
 class UserController extends Controller
 {
@@ -21,11 +24,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
+        if (\Gate::allows('isAdmin')) {
             return User::latest()->paginate(15);
         }
     }
@@ -33,72 +36,59 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $request->validate([
-            'name'      => 'required|string|max:191',
-            'email'     => 'required|string|max:191|unique:users,email|email',
-            'type'      => 'required|string|max:191',
-            'password'  => 'required|string|min:6',
-        ]);
-        $data = $request->only(['name', 'email', 'type']);
-        $data['password'] = Hash::make($request->password);
+        try {
+            $data = $request->only(['name', 'email', 'type']);
+            $data['password'] = Hash::make($request->password);
 
-        return User::create($data);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+            return User::create($data);
+        } catch (Exception $e) {
+            return \response(['an error happened!!!'], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @param User $user
+     * @return ResponseFactory|Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        $request->validate([
-            'name'      => 'required|string|max:191',
-            'email'     => 'required|string|max:191|email|unique:users,email,' . $user->id,
-            'type'      => 'required|string|max:191',
-            'password'  => 'nullable|string|min:6',
-        ]);
+        try {
+            $data = $request->only(['name', 'email', 'type']);
+            if($request->password) {
+                $data['password'] = Hash::make($request->password);
+            }
+            $user->update($data);
 
-        $data = $request->only(['name', 'email', 'type']);
-        if($request->password) {
-            $data['password'] = Hash::make($request->password);
+            return \response(['ok'], 201);
+        } catch (Exception $e) {
+            return \response(['an error happened!!!'], 500);
         }
-        $user->update($data);
-
-        return ['ok'];
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param User $user
-     * @return void
-     * @throws \Exception
+     * @return ResponseFactory|Response
      */
     public function destroy(User $user)
     {
-        $this->authorize('isAdmin');
+        try {
+            $this->authorize('isAdmin');
 
-        $user->delete();
+            $user->delete();
 
-        return ['ok'];
+            return \response(['ok'], 201);
+        } catch (Exception $e) {
+            return \response(['an error happened!!!'], 500);
+        }
     }
 }

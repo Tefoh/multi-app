@@ -37,4 +37,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'fa_type'
+    ];
+
+    public function getFaTypeAttribute()
+    {
+        return $this->type == 'freelancer' ? 'فریلنسر' : ($this->type == 'admin' ? 'مدیر' : 'کارفرما');
+    }
 }
